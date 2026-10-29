@@ -1,4 +1,4 @@
-﻿# Gera dist\PC-TV-Instalador.exe com o IExpress (vem no Windows).
+﻿# Gera dist\Lume-Instalador.exe com o IExpress (vem no Windows).
 # O .exe leva o app e as dependencias; o Node.js e baixado de nodejs.org na hora de instalar.
 # (Nome sem "setup"/"install" para o Windows nao pedir administrador sem necessidade.)
 $ErrorActionPreference = 'Stop'
@@ -28,7 +28,7 @@ Compress-Archive "$app\*" "$pacote\app.zip"
 Copy-Item "$PSScriptRoot\instalar.ps1", "$PSScriptRoot\setup.cmd" $pacote
 
 Write-Host '>> Gerando o .exe'
-$exe = "$tmp\PC-TV-Instalador.exe"
+$exe = "$tmp\Lume-Instalador.exe"
 @"
 [Version]
 Class=IEXPRESS
@@ -57,7 +57,7 @@ InstallPrompt=
 DisplayLicense=
 FinishMessage=
 TargetName=$exe
-FriendlyName=PC-TV by Art Code
+FriendlyName=Lume by Art Code
 AppLaunched=cmd /c setup.cmd
 PostInstallCmd=<None>
 AdminQuietInstCmd=
@@ -76,4 +76,4 @@ SourceFiles0=$pacote\
 Start-Process iexpress.exe -ArgumentList '/N', '/Q', "$tmp\pctv.sed" -Wait -NoNewWindow
 if (-not (Test-Path $exe)) { throw 'IExpress nao gerou o instalador' }
 Copy-Item $exe $dist
-Write-Host "OK  $dist\PC-TV-Instalador.exe ($([math]::Round((Get-Item $exe).Length / 1MB, 2)) MB)" -ForegroundColor Green
+Write-Host "OK  $dist\Lume-Instalador.exe ($([math]::Round((Get-Item $exe).Length / 1MB, 2)) MB)" -ForegroundColor Green

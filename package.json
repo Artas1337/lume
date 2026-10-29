@@ -1,6 +1,6 @@
 {
-  "name": "pc-tv",
-  "version": "0.2.0",
+  "name": "lume",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "description": "Transforma o PC em TV: launcher de streaming + controle remoto pelo celular",

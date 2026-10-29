@@ -7,7 +7,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Controle PC-TV</title>
+<title>Controle Lume</title>
 <style>
   :root {
     color-scheme: dark;
@@ -23,7 +23,14 @@
   html, body { height: 100%; background: var(--bg); color: var(--text); font-family: system-ui, sans-serif; }
   body { display: flex; flex-direction: column; padding: 16px; padding-top: max(16px, env(safe-area-inset-top)); user-select: none; -webkit-user-select: none; }
   header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-  header b { font-size: 18px; letter-spacing: .04em; }
+  header b { display: flex; align-items: center; gap: 10px; font-size: 19px; letter-spacing: .01em; }
+  header b i {
+    width: 28px; height: 28px; border-radius: 9px;
+    display: grid; place-items: center;
+    background: linear-gradient(135deg, var(--accent), #8b5cff);
+    box-shadow: 0 0 16px rgba(79, 124, 255, .5);
+  }
+  header b svg { width: 72%; height: 72%; }
   #status { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
   #status::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #e5484d; }
   #status.on::before { background: #3dd68c; }
@@ -127,7 +134,7 @@
 </style>
 </head>
 <body>
-  <header><b>PC-TV</b><span id="status">desconectado</span></header>
+  <header><b><i><svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round"><circle cx="24" cy="24" r="8" fill="#fff" stroke="none"/><path d="M24 9a15 15 0 0 1 15 15"/><path d="M24 39a15 15 0 0 1-15-15" opacity=".55"/></svg></i>Lume</b><span id="status">desconectado</span></header>
   <nav>
     <button data-tab="pad" class="on">Controle</button>
     <button data-tab="touch">Touchpad</button>
@@ -187,7 +194,7 @@
     <p id="cfgStatus" role="status"></p>
   </section>
 
-  <footer>PC-TV by <b>Art Code</b></footer>
+  <footer>Lume by <b>Art Code</b></footer>
 
 <script>
   let ws;
@@ -319,7 +326,7 @@
       mostrarCfg(await r.json());
       cfgStatus.textContent = 'Pronto, já está na TV.';
     } catch {
-      cfgStatus.textContent = 'Não deu certo. Confira se o PC-TV está aberto e tente de novo.';
+      cfgStatus.textContent = 'Não deu certo. Confira se o Lume está aberto e tente de novo.';
     }
   }
 

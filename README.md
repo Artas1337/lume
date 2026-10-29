@@ -1,10 +1,12 @@
-# PC-TV: o computador vira uma TV
+# Lume: o computador vira uma TV
 
-Launcher de streaming em tela cheia, controlado pelo **celular como controle remoto**. Liga o PC na TV, abre o PC-TV e escolhe entre Netflix, YouTube, Prime Video, Disney+, HBO Max, Globoplay, Apple TV+, Paramount+, Crunchyroll, Pluto TV, Twitch e Spotify sem tocar no mouse.
+> Antes chamado PC-TV. Quem instalou a versão antiga pode instalar o Lume por cima: logins, nome e papel de parede vêm junto.
 
-![CI](https://github.com/Artas1337/pc-tv/actions/workflows/ci.yml/badge.svg)
+Launcher de streaming em tela cheia, controlado pelo **celular como controle remoto**. Liga o PC na TV, abre o Lume e escolhe entre Netflix, YouTube, Prime Video, Disney+, HBO Max, Globoplay, Apple TV+, Paramount+, Crunchyroll, Pluto TV, Twitch e Spotify sem tocar no mouse.
 
-### ⬇️ [Baixar o instalador para Windows](https://github.com/Artas1337/pc-tv/releases/latest/download/PC-TV-Instalador.exe)
+![CI](https://github.com/Artas1337/lume/actions/workflows/ci.yml/badge.svg)
+
+### ⬇️ [Baixar o instalador para Windows](https://github.com/Artas1337/lume/releases/latest/download/Lume-Instalador.exe)
 
 Dois cliques no arquivo baixado e pronto. Se o Windows mostrar "O Windows protegeu o computador", clique em **Mais informações** → **Executar assim mesmo** (o programa não tem assinatura digital paga).
 
@@ -31,7 +33,7 @@ Dois cliques no arquivo baixado e pronto. Se o Windows mostrar "O Windows proteg
 | Modais (detalhes do filme) | A navegação fica presa dentro do `[role=dialog]` aberto; Voltar manda Esc para fechar. |
 | Volume com atraso de ~0,5 s por clique | Um único PowerShell fica aberto lendo códigos de tecla do stdin e chama `keybd_event`, em vez de abrir um processo por clique. |
 | Login dos streamings não pode se perder | Edge com perfil próprio (`--user-data-dir`) em vez de modo quiosque, que apaga os dados ao fechar. |
-| Atalho clicado com o PC-TV já rodando | A segunda instância detecta `EADDRINUSE`, só reabre a tela da TV e sai. |
+| Atalho clicado com o Lume já rodando | A segunda instância detecta `EADDRINUSE`, só reabre a tela da TV e sai. |
 | Extensões do navegador abrindo abas próprias | Edge iniciado com `--disable-extensions` e o CDP ignora alvos `chrome-extension://`. |
 
 ## Stack
@@ -69,7 +71,7 @@ Para adicionar ou remover serviços, edite `apps.json`.
 
 ## Instalador
 
-Para quem só quer usar: baixe o `.exe` em [Releases](https://github.com/Artas1337/pc-tv/releases/latest). Quem baixou o código pode dar dois cliques em `Instalar PC-TV.cmd`.
+Para quem só quer usar: baixe o `.exe` em [Releases](https://github.com/Artas1337/lume/releases/latest). Quem baixou o código pode dar dois cliques em `Instalar Lume.cmd`.
 
 Para gerar o `.exe` de novo:
 
@@ -77,7 +79,7 @@ Para gerar o `.exe` de novo:
 powershell -ExecutionPolicy Bypass -File instalador\gerar-instalador.ps1
 ```
 
-Gera `dist\PC-TV-Instalador.exe` com o IExpress do Windows. O instalador copia o app para `%LOCALAPPDATA%\Programs\PC-TV`, baixa o Node.js oficial (conferido pelo SHA-256 de nodejs.org), cria os atalhos e registra a desinstalação em Configurações → Aplicativos. Não pede administrador.
+Gera `dist\Lume-Instalador.exe` com o IExpress do Windows. O instalador copia o app para `%LOCALAPPDATA%\Programs\Lume`, baixa o Node.js oficial (conferido pelo SHA-256 de nodejs.org), cria os atalhos e registra a desinstalação em Configurações → Aplicativos. Não pede administrador.
 
 ## Estrutura
 

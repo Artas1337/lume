@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<title>PC-TV</title>
+<title>Lume</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@200;300;400;600;700;800&display=swap" rel="stylesheet">
@@ -74,20 +74,15 @@
   .ui.leaving { transform: scale(.9); filter: blur(14px); opacity: 0; }
 
   .top { display: flex; justify-content: space-between; align-items: center; animation: fadeDown .9s var(--ease) both; }
-  .brand { display: flex; align-items: center; gap: .9vw; font-weight: 700; font-size: 1.4vw; letter-spacing: .12em; }
+  .brand { display: flex; align-items: center; gap: .9vw; font-weight: 700; font-size: 1.7vw; letter-spacing: .01em; }
+  /* Símbolo do Lume: um ponto de luz com halo, no tom do app focado */
   .brand i {
-    width: 2.3vw; height: 2.3vw; border-radius: .7vw;
+    width: 2.5vw; height: 2.5vw; border-radius: .75vw;
     display: grid; place-items: center;
-    background: linear-gradient(135deg, var(--accent), color-mix(in oklab, var(--accent) 30%, #fff));
+    background: linear-gradient(135deg, var(--accent), color-mix(in oklab, var(--accent) 35%, #8b5cff));
     box-shadow: 0 0 2.4vw color-mix(in oklab, var(--accent) 65%, transparent);
   }
-  .brand i::before {
-    content: '';
-    margin-left: .2vw;
-    border-left: .75vw solid #fff;
-    border-top: .45vw solid transparent;
-    border-bottom: .45vw solid transparent;
-  }
+  .brand i svg { width: 72%; height: 72%; filter: drop-shadow(0 0 .3vw rgba(255, 255, 255, .8)); }
   .brand small {
     display: block;
     margin-top: .15vw;
@@ -363,7 +358,10 @@
 
   <div class="ui">
     <div class="top">
-      <div class="brand"><i></i><div>PC-TV<small>by Art Code</small></div></div>
+      <div class="brand">
+        <i><svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round"><circle cx="24" cy="24" r="8" fill="#fff" stroke="none"/><path d="M24 9a15 15 0 0 1 15 15"/><path d="M24 39a15 15 0 0 1-15-15" opacity=".55"/></svg></i>
+        <div>Lume<small>by Art Code</small></div>
+      </div>
       <div class="lado">
         <button id="ajustes" class="gear" aria-label="Ajustes">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>
@@ -402,7 +400,7 @@
     </div>
   </div>
 
-  <div class="saver"><div><div id="saverClock"></div><div id="saverDate"></div></div><small>PC-TV by Art Code</small></div>
+  <div class="saver"><div><div id="saverClock"></div><div id="saverDate"></div></div><small>Lume by Art Code</small></div>
 
 <script>
   // O launcher tem navegação própria; a injetada (lib/nav.js) deixa as teclas passarem

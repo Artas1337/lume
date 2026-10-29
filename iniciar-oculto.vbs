@@ -1,4 +1,4 @@
-' Inicia o PC-TV sem janela de terminal.
+' Inicia o Lume sem janela de terminal.
 ' Usa o Node da pasta "node" (versão instalada) ou, se não existir, o Node do sistema.
 Set fso = CreateObject("Scripting.FileSystemObject")
 Set sh = CreateObject("WScript.Shell")

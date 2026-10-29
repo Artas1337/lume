@@ -149,7 +149,7 @@ wss.on('connection', (ws) => {
   });
 });
 
-// Atalho clicado com o PC-TV já rodando: só garante que a tela da TV está aberta
+// Atalho clicado com o Lume já rodando: só garante que a tela da TV está aberta
 server.on('error', async (err) => {
   if (err.code !== 'EADDRINUSE') throw err;
   try { await tv.start(); } catch (e) { console.error('Falha ao abrir o Edge:', e.message); }
@@ -157,6 +157,6 @@ server.on('error', async (err) => {
 });
 
 server.listen(PORT, '0.0.0.0', async () => {
-  console.log(`PC-TV rodando. Controle no celular: http://${lanIp()}:${PORT}/remote`);
+  console.log(`Lume rodando. Controle no celular: http://${lanIp()}:${PORT}/remote`);
   try { await tv.start(); } catch (err) { console.error('Falha ao abrir o Edge:', err.message); }
 });

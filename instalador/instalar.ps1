@@ -1,8 +1,8 @@
-﻿# Instalador do PC-TV: copia o app, baixa o Node.js oficial e cria os atalhos.
+﻿# Instalador do Lume: copia o app, baixa o Node.js oficial e cria os atalhos.
 # Instala só para o usuário atual (sem administrador). Reinstalar mantém os logins salvos.
 param(
   [string]$Pacote = $PSScriptRoot,
-  [string]$Destino = "$env:LOCALAPPDATA\Programs\PC-TV",
+  [string]$Destino = "$env:LOCALAPPDATA\Programs\Lume",
   [switch]$Teste   # sem atalhos, sem registro, sem abrir e sem pausa
 )
 
@@ -16,11 +16,32 @@ function Pausar { if (-not $Teste) { Read-Host "`nPressione Enter para fechar" |
 
 Write-Host ''
 Write-Host '  ==========================================' -ForegroundColor DarkGray
-Write-Host '    PC-TV by Art Code  -  instalador' -ForegroundColor White
+Write-Host '    Lume by Art Code  -  instalador' -ForegroundColor White
 Write-Host '  ==========================================' -ForegroundColor DarkGray
 
 try {
-  Passo 'Fechando o PC-TV, se estiver aberto'
+  # O app se chamava PC-TV: leva logins, preferências e o Node da instalação antiga para a nova
+  $antigo = "$env:LOCALAPPDATA\Programs\PC-TV"
+  $iniciavaComWindows = Test-Path (Join-Path ([Environment]::GetFolderPath('Startup')) 'PC-TV.lnk')
+  if (-not $Teste -and (Test-Path $antigo) -and $antigo -ne $Destino) {
+    Passo 'Trazendo seus dados do PC-TV (nome antigo do app)'
+    Get-CimInstance Win32_Process |
+      Where-Object { $_.ProcessId -ne $PID -and $_.CommandLine -and $_.CommandLine.Contains($antigo) } |
+      ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }
+    Start-Sleep -Milliseconds 800
+    New-Item -ItemType Directory -Force $Destino | Out-Null
+    foreach ($pasta in '.perfil-edge', 'dados', 'node') {
+      if ((Test-Path "$antigo\$pasta") -and -not (Test-Path "$Destino\$pasta")) { Move-Item "$antigo\$pasta" "$Destino\$pasta" }
+    }
+    foreach ($local in 'Desktop', 'Programs', 'Startup') {
+      Remove-Item (Join-Path ([Environment]::GetFolderPath($local)) 'PC-TV.lnk') -ErrorAction SilentlyContinue
+    }
+    Remove-Item 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\PC-TV' -Recurse -Force -ErrorAction SilentlyContinue
+    Remove-Item -Recurse -Force $antigo -ErrorAction SilentlyContinue
+    Ok 'logins, nome e papel de parede mantidos'
+  }
+
+  Passo 'Fechando o Lume, se estiver aberto'
   Get-CimInstance Win32_Process |
     Where-Object { $_.ProcessId -ne $PID -and $_.CommandLine -and $_.CommandLine.Contains($Destino) } |
     ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }
@@ -31,7 +52,7 @@ try {
   New-Item -ItemType Directory -Force $Destino | Out-Null
   $codigo = Split-Path $Pacote -Parent
   if (Test-Path "$Pacote\app.zip") {
-    # Rodando de dentro do PC-TV-Instalador.exe: o app já vem pronto, com dependências
+    # Rodando de dentro do Lume-Instalador.exe: o app já vem pronto, com dependências
     Expand-Archive -Path "$Pacote\app.zip" -DestinationPath $Destino -Force
   } elseif (Test-Path "$codigo\server.js") {
     # Rodando da pasta baixada do GitHub: copia o código; as dependências vêm depois do Node
@@ -40,7 +61,7 @@ try {
     foreach ($i in $itens) { Copy-Item "$codigo\$i" $Destino -Recurse -Force }
     Copy-Item "$Pacote\desinstalar.ps1" $Destino -Force
   } else {
-    throw 'Arquivos do PC-TV nao encontrados. Use o PC-TV-Instalador.exe ou rode este script de dentro da pasta "instalador" do projeto.'
+    throw 'Arquivos do Lume nao encontrados. Use o Lume-Instalador.exe ou rode este script de dentro da pasta "instalador" do projeto.'
   }
   Ok $Destino
 
@@ -87,37 +108,39 @@ try {
   if (-not $Teste) {
     Passo 'Criando atalhos'
     & "$Destino\criar-atalho.ps1" | Out-Null
-    $menu = Join-Path ([Environment]::GetFolderPath('Programs')) 'PC-TV.lnk'
+    $menu = Join-Path ([Environment]::GetFolderPath('Programs')) 'Lume.lnk'
     $s = (New-Object -ComObject WScript.Shell).CreateShortcut($menu)
     $s.TargetPath = 'wscript.exe'
     $s.Arguments = "`"$Destino\iniciar-oculto.vbs`""
     $s.WorkingDirectory = $Destino
-    $s.IconLocation = "$Destino\icone.ico,0"
-    $s.Description = 'Abrir PC-TV'
+    $s.IconLocation = "$Destino\lume.ico,0"
+    $s.Description = 'Abrir Lume'
     $s.Save()
     Ok 'area de trabalho e menu Iniciar'
 
     # Aparece em Configuracoes > Aplicativos, com opcao de desinstalar
-    $chave = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\PC-TV'
+    $chave = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\Lume'
     New-Item -Force $chave | Out-Null
     $versao = (Get-Content "$Destino\package.json" -Raw | ConvertFrom-Json).version
     $textos = @{
-      DisplayName = 'PC-TV'
+      DisplayName = 'Lume'
       Publisher = 'Art Code'
       DisplayVersion = $versao
       InstallLocation = $Destino
-      DisplayIcon = "$Destino\icone.ico"
+      DisplayIcon = "$Destino\lume.ico"
       UninstallString = "powershell.exe -NoProfile -ExecutionPolicy Bypass -File `"$Destino\desinstalar.ps1`""
     }
     foreach ($k in $textos.Keys) { Set-ItemProperty $chave $k $textos[$k] }
     foreach ($k in 'NoModify', 'NoRepair') { New-ItemProperty $chave $k -Value 1 -PropertyType DWord -Force | Out-Null }
     Ok 'registrado em Configuracoes > Aplicativos'
 
+    if ($iniciavaComWindows) { & "$Destino\instalar-inicializacao.ps1" | Out-Null }
+
     Start-Process wscript.exe "`"$Destino\iniciar-oculto.vbs`""
   }
 
-  Write-Host "`n  PRONTO! O PC-TV esta instalado e abrindo." -ForegroundColor Green
-  Write-Host '  - Abra de novo pelo atalho PC-TV na area de trabalho.' -ForegroundColor Gray
+  Write-Host "`n  PRONTO! O Lume esta instalado e abrindo." -ForegroundColor Green
+  Write-Host '  - Abra de novo pelo atalho Lume na area de trabalho.' -ForegroundColor Gray
   Write-Host '  - Na primeira vez, o Windows pergunta sobre o firewall: permita em redes PRIVADAS.' -ForegroundColor Gray
   Write-Host '  - No celular (mesmo Wi-Fi), leia o QR code que aparece na tela.' -ForegroundColor Gray
   Pausar
