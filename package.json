@@ -1,0 +1,19 @@
+{
+  "name": "pc-tv",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Transforma o PC em TV: launcher de streaming + controle remoto pelo celular",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "qrcode": "^1.5.4",
+    "ws": "^8.18.0"
+  }
+}

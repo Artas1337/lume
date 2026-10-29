@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#0e0f13">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Controle PC-TV</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #0e0f13;
+    --btn: #1c1f27;
+    --btn-on: #2b3040;
+    --line: #2a2e3a;
+    --text: #e9ecf5;
+    --muted: #8a90a2;
+    --accent: #4f7cff;
+  }
+  * { box-sizing: border-box; margin: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: system-ui, sans-serif; }
+  body { display: flex; flex-direction: column; padding: 16px; padding-top: max(16px, env(safe-area-inset-top)); user-select: none; -webkit-user-select: none; }
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  header b { font-size: 18px; letter-spacing: .04em; }
+  #status { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+  #status::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #e5484d; }
+  #status.on::before { background: #3dd68c; }
+  nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; background: var(--btn); border-radius: 12px; margin-bottom: 20px; }
+  nav button { background: none; color: var(--muted); padding: 10px 0; border-radius: 9px; font-size: 14px; font-weight: 600; }
+  nav button.on { background: var(--btn-on); color: var(--text); }
+  button { border: 0; font: inherit; color: var(--text); background: var(--btn); touch-action: manipulation; }
+  button:active { background: var(--btn-on); }
+  .tab { display: none; flex: 1; flex-direction: column; gap: 14px; }
+  .tab.on { display: flex; }
+  .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .row.two { grid-template-columns: repeat(2, 1fr); }
+  .row button { height: 58px; border-radius: 14px; font-size: 16px; font-weight: 600; }
+
+  .dpad {
+    position: relative;
+    width: min(78vw, 300px);
+    aspect-ratio: 1;
+    margin: 6px auto 18px;
+    border-radius: 50%;
+    background: var(--btn);
+    box-shadow: inset 0 0 0 1px var(--line);
+    overflow: hidden;
+  }
+  .dpad button { position: absolute; background: none; color: var(--muted); font-size: 22px; }
+  .dpad button:active { background: var(--btn-on); color: var(--text); }
+  .dpad .up, .dpad .down { left: 30%; width: 40%; height: 30%; }
+  .dpad .left, .dpad .right { top: 30%; width: 30%; height: 40%; }
+  .dpad .up { top: 0; } .dpad .down { bottom: 0; }
+  .dpad .left { left: 0; } .dpad .right { right: 0; }
+  .dpad .ok {
+    left: 30%; top: 30%; width: 40%; height: 40%;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 20px;
+    font-weight: 700;
+    box-shadow: 0 6px 20px rgba(79, 124, 255, .35);
+  }
+  .dpad .ok:active { background: #3c66e6; }
+
+  #tp {
+    flex: 1;
+    min-height: 260px;
+    border-radius: 18px;
+    background: var(--btn);
+    box-shadow: inset 0 0 0 1px var(--line);
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--muted);
+    touch-action: none;
+  }
+  form { display: flex; gap: 10px; }
+  input {
+    flex: 1;
+    min-width: 0;
+    height: 54px;
+    padding: 0 16px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--btn);
+    color: var(--text);
+    font: inherit;
+    font-size: 16px;
+  }
+  input:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+  form button { padding: 0 20px; border-radius: 14px; background: var(--accent); color: #fff; font-weight: 600; }
+</style>
+</head>
+<body>
+  <header><b>PC-TV</b><span id="status">desconectado</span></header>
+  <nav>
+    <button data-tab="pad" class="on">Controle</button>
+    <button data-tab="touch">Touchpad</button>
+    <button data-tab="kbd">Teclado</button>
+  </nav>
+
+  <section id="pad" class="tab on">
+    <div class="dpad">
+      <button class="up" data-key="up" aria-label="Cima">▲</button>
+      <button class="left" data-key="left" aria-label="Esquerda">◀</button>
+      <button class="ok" data-key="ok">OK</button>
+      <button class="right" data-key="right" aria-label="Direita">▶</button>
+      <button class="down" data-key="down" aria-label="Baixo">▼</button>
+    </div>
+    <div class="row">
+      <button data-key="back">↩ Voltar</button>
+      <button data-cmd="home">⌂ Início</button>
+      <button data-key="play">⏯</button>
+    </div>
+    <div class="row">
+      <button data-vol="down" aria-label="Volume -">🔉</button>
+      <button data-vol="mute" aria-label="Mudo">🔇</button>
+      <button data-vol="up" aria-label="Volume +">🔊</button>
+    </div>
+  </section>
+
+  <section id="touch" class="tab">
+    <div id="tp">Arraste para mover<br>Toque para clicar<br>Dois dedos para rolar</div>
+    <div class="row">
+      <button data-cmd="click">Clique</button>
+      <button data-key="back">↩ Voltar</button>
+      <button data-cmd="home">⌂ Início</button>
+    </div>
+  </section>
+
+  <section id="kbd" class="tab">
+    <form id="form">
+      <input id="txt" autocomplete="off" autocapitalize="off" placeholder="Digite (busca, e-mail…)">
+      <button>Enviar</button>
+    </form>
+    <div class="row two">
+      <button data-key="backspace">⌫ Apagar</button>
+      <button data-key="ok">↵ Enter</button>
+    </div>
+  </section>
+
+<script>
+  let ws;
+  const status = document.getElementById('status');
+
+  function connect() {
+    ws = new WebSocket(`ws://${location.host}/ws`);
+    ws.onopen = () => { status.textContent = 'conectado'; status.classList.add('on'); };
+    ws.onclose = () => {
+      status.textContent = 'desconectado';
+      status.classList.remove('on');
+      setTimeout(connect, 1000);
+    };
+  }
+  connect();
+
+  function send(msg) {
+    if (ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(msg));
+  }
+
+  // Abas
+  document.querySelectorAll('nav button').forEach((b) => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('nav button, .tab').forEach((el) => el.classList.remove('on'));
+      b.classList.add('on');
+      document.getElementById(b.dataset.tab).classList.add('on');
+    });
+  });
+
+  // Botões, com repetição ao segurar (setas e volume)
+  const REPEAT = new Set(['up', 'down', 'left', 'right']);
+  document.querySelectorAll('[data-key], [data-vol], [data-cmd]').forEach((el) => {
+    const d = el.dataset;
+    const msg = d.key ? { t: 'key', k: d.key } : d.vol ? { t: 'vol', v: d.vol } : { t: d.cmd };
+    const repeats = REPEAT.has(d.key) || d.vol === 'up' || d.vol === 'down';
+    let delay, interval;
+    const stop = () => { clearTimeout(delay); clearInterval(interval); };
+    el.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      send(msg);
+      navigator.vibrate?.(8);
+      if (repeats) delay = setTimeout(() => { interval = setInterval(() => send(msg), 110); }, 400);
+    });
+    ['pointerup', 'pointerleave', 'pointercancel'].forEach((ev) => el.addEventListener(ev, stop));
+  });
+
+  // Touchpad
+  const tp = document.getElementById('tp');
+  const SPEED = 2.2;
+  let last, startAt, moved, maxFingers, frame = 0;
+  const acc = { dx: 0, dy: 0, scroll: 0 };
+
+  const center = (touches) => {
+    let x = 0, y = 0;
+    for (const t of touches) { x += t.clientX; y += t.clientY; }
+    return { x: x / touches.length, y: y / touches.length };
+  };
+
+  function flush() {
+    frame = 0;
+    const dx = Math.round(acc.dx), dy = Math.round(acc.dy), s = Math.round(acc.scroll);
+    acc.dx -= dx; acc.dy -= dy; acc.scroll -= s;
+    if (dx || dy) send({ t: 'move', dx, dy });
+    if (s) send({ t: 'scroll', dy: s });
+  }
+
+  tp.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 1) { startAt = Date.now(); moved = 0; maxFingers = 1; }
+    maxFingers = Math.max(maxFingers, e.touches.length);
+    last = center(e.touches);
+  }, { passive: false });
+
+  tp.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    const p = center(e.touches);
+    const dx = p.x - last.x, dy = p.y - last.y;
+    last = p;
+    moved += Math.abs(dx) + Math.abs(dy);
+    if (e.touches.length >= 2) acc.scroll -= dy * 3;
+    else { acc.dx += dx * SPEED; acc.dy += dy * SPEED; }
+    frame ||= requestAnimationFrame(flush);
+  }, { passive: false });
+
+  tp.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    if (e.touches.length) { last = center(e.touches); return; }
+    if (maxFingers === 1 && moved < 10 && Date.now() - startAt < 250) {
+      send({ t: 'click' });
+      navigator.vibrate?.(8);
+    }
+  }, { passive: false });
+
+  // Teclado
+  const txt = document.getElementById('txt');
+  document.getElementById('form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (txt.value) send({ t: 'text', s: txt.value });
+    txt.value = '';
+    txt.focus();
+  });
+</script>
+</body>
+</html>

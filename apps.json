@@ -1,0 +1,86 @@
+[
+  {
+    "id": "netflix", "name": "Netflix", "label": "NETFLIX",
+    "tagline": "Séries, filmes e documentários originais",
+    "url": "https://www.netflix.com/browse",
+    "bg": "radial-gradient(circle at 30% 20%, #2a0a0c, #0b0b0b 70%)", "color": "#e50914", "accent": "#e50914",
+    "labelStyle": { "fontFamily": "'Bebas Neue', sans-serif", "fontSize": "2.4vw", "fontWeight": "400", "letterSpacing": ".04em" }
+  },
+  {
+    "id": "youtube", "name": "YouTube", "label": "YouTube",
+    "tagline": "Vídeos, música e lives",
+    "url": "https://www.youtube.com/",
+    "bg": "linear-gradient(135deg, #ff1f45, #b3001b)", "color": "#ffffff", "accent": "#ff1f45",
+    "labelStyle": { "fontWeight": "700", "letterSpacing": "-.03em" }
+  },
+  {
+    "id": "prime", "name": "Prime Video", "label": "prime video",
+    "tagline": "Filmes, séries e esportes da Amazon",
+    "url": "https://www.primevideo.com/",
+    "bg": "linear-gradient(135deg, #0f171e, #1a6fd1)", "color": "#ffffff", "accent": "#1a98ff",
+    "labelStyle": { "fontWeight": "800", "letterSpacing": "-.02em" }
+  },
+  {
+    "id": "disney", "name": "Disney+", "label": "Disney+",
+    "tagline": "Disney, Pixar, Marvel, Star Wars e National Geographic",
+    "url": "https://www.disneyplus.com/",
+    "bg": "linear-gradient(135deg, #040714, #0b3d91 60%, #1fb6c9)", "color": "#ffffff", "accent": "#1f80e0",
+    "labelStyle": { "fontWeight": "600", "fontStyle": "italic", "letterSpacing": "-.01em" }
+  },
+  {
+    "id": "hbomax", "name": "HBO Max", "label": "HBO max",
+    "tagline": "HBO, Warner, DC e muito mais",
+    "url": "https://play.hbomax.com/",
+    "bg": "linear-gradient(135deg, #000000, #1d18c9)", "color": "#ffffff", "accent": "#3b36ff",
+    "labelStyle": { "fontWeight": "800", "letterSpacing": ".02em" }
+  },
+  {
+    "id": "globoplay", "name": "Globoplay", "label": "globoplay",
+    "tagline": "Novelas, séries brasileiras e TV Globo ao vivo",
+    "url": "https://globoplay.globo.com/",
+    "bg": "linear-gradient(135deg, #fb0234, #ff6b00)", "color": "#ffffff", "accent": "#fb0234",
+    "labelStyle": { "fontWeight": "700", "letterSpacing": "-.03em" }
+  },
+  {
+    "id": "appletv", "name": "Apple TV+", "label": "Apple TV+",
+    "tagline": "Originais da Apple",
+    "url": "https://tv.apple.com/br",
+    "bg": "linear-gradient(135deg, #2c2c2e, #0a0a0b)", "color": "#ffffff", "accent": "#c7c7cc",
+    "labelStyle": { "fontWeight": "600", "letterSpacing": "-.02em" }
+  },
+  {
+    "id": "paramount", "name": "Paramount+", "label": "Paramount+",
+    "tagline": "Filmes da Paramount, CBS e Nickelodeon",
+    "url": "https://www.paramountplus.com/br/",
+    "bg": "linear-gradient(135deg, #0064ff, #001a5c)", "color": "#ffffff", "accent": "#0064ff",
+    "labelStyle": { "fontWeight": "600", "letterSpacing": "0" }
+  },
+  {
+    "id": "crunchyroll", "name": "Crunchyroll", "label": "crunchyroll",
+    "tagline": "Animes legendados e dublados",
+    "url": "https://www.crunchyroll.com/pt-br/",
+    "bg": "linear-gradient(135deg, #f47521, #ff9a3c)", "color": "#ffffff", "accent": "#f47521",
+    "labelStyle": { "fontWeight": "800", "letterSpacing": "-.03em" }
+  },
+  {
+    "id": "pluto", "name": "Pluto TV", "label": "pluto tv",
+    "tagline": "Canais ao vivo grátis",
+    "url": "https://pluto.tv/br",
+    "bg": "radial-gradient(circle at 70% 30%, #2b2a10, #0d0d0d 70%)", "color": "#fff200", "accent": "#fff200",
+    "labelStyle": { "fontWeight": "800", "letterSpacing": "-.02em" }
+  },
+  {
+    "id": "twitch", "name": "Twitch", "label": "twitch",
+    "tagline": "Lives de jogos e criadores",
+    "url": "https://www.twitch.tv/",
+    "bg": "linear-gradient(135deg, #9146ff, #4b10a8)", "color": "#ffffff", "accent": "#9146ff",
+    "labelStyle": { "fontWeight": "800", "letterSpacing": "-.02em" }
+  },
+  {
+    "id": "spotify", "name": "Spotify", "label": "Spotify",
+    "tagline": "Músicas e podcasts",
+    "url": "https://open.spotify.com/",
+    "bg": "linear-gradient(135deg, #1ed760, #0b5d2a)", "color": "#ffffff", "accent": "#1ed760",
+    "labelStyle": { "fontWeight": "700", "letterSpacing": "-.02em" }
+  }
+]

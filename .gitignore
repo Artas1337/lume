@@ -1,0 +1,6 @@
+node_modules/
+# Perfil do Edge da TV: contém logins e cookies dos streamings
+.perfil-edge/
+# Gerado por criar-atalho.ps1
+icone.ico
+*.log

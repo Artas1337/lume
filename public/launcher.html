@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>PC-TV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@200;300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  @property --accent { syntax: '<color>'; inherits: true; initial-value: #4f7cff; }
+
+  :root {
+    color-scheme: dark;
+    --ui: 'Outfit', 'Segoe UI', system-ui, sans-serif;
+    --ease: cubic-bezier(.2, .8, .2, 1);
+    --swoop: cubic-bezier(.7, 0, .2, 1);
+    transition: --accent 1s ease;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html, body {
+    height: 100%;
+    overflow: hidden;
+    cursor: none;
+    color: #f2f4fa;
+    background: #06070b;
+    font-family: var(--ui);
+  }
+
+  /* ---------- Fundo vivo: aurora na cor do app focado + poeira + granulado ---------- */
+  .bg { position: fixed; inset: 0; overflow: hidden; z-index: 0; }
+  .blob { position: absolute; border-radius: 50%; filter: blur(9vw); mix-blend-mode: screen; }
+  .b1 {
+    width: 62vw; height: 62vw; top: -30vw; left: -12vw;
+    background: var(--accent); opacity: .5;
+    animation: drift1 26s ease-in-out infinite alternate;
+  }
+  .b2 {
+    width: 55vw; height: 55vw; bottom: -32vw; right: -14vw;
+    background: color-mix(in oklab, var(--accent) 45%, #3b2cff); opacity: .35;
+    animation: drift2 32s ease-in-out infinite alternate;
+  }
+  .b3 {
+    width: 34vw; height: 34vw; top: 28%; left: 46%;
+    background: #0a6bff; opacity: .14;
+    animation: drift3 40s ease-in-out infinite alternate;
+  }
+  @keyframes drift1 { to { transform: translate(20vw, 9vw) scale(1.15); } }
+  @keyframes drift2 { to { transform: translate(-16vw, -10vw) scale(1.2); } }
+  @keyframes drift3 { to { transform: translate(-22vw, 12vw) scale(.85); } }
+  .bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, transparent 55%, rgba(6, 7, 11, .85)),
+      radial-gradient(ellipse at center, transparent 35%, rgba(0, 0, 0, .7) 100%);
+  }
+  #dust { position: fixed; inset: 0; z-index: 1; width: 100%; height: 100%; pointer-events: none; }
+  .grain {
+    position: fixed; inset: 0; z-index: 6; pointer-events: none; opacity: .06;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ---------- Layout ---------- */
+  .ui {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr auto auto;
+    padding: 4.5vh 5vw 4.5vh;
+    transition: transform .8s var(--swoop), filter .8s var(--swoop), opacity .6s ease;
+  }
+  .ui.leaving { transform: scale(.9); filter: blur(14px); opacity: 0; }
+
+  .top { display: flex; justify-content: space-between; align-items: center; animation: fadeDown .9s var(--ease) both; }
+  .brand { display: flex; align-items: center; gap: .9vw; font-weight: 700; font-size: 1.4vw; letter-spacing: .12em; }
+  .brand i {
+    width: 2.3vw; height: 2.3vw; border-radius: .7vw;
+    display: grid; place-items: center;
+    background: linear-gradient(135deg, var(--accent), color-mix(in oklab, var(--accent) 30%, #fff));
+    box-shadow: 0 0 2.4vw color-mix(in oklab, var(--accent) 65%, transparent);
+  }
+  .brand i::before {
+    content: '';
+    margin-left: .2vw;
+    border-left: .75vw solid #fff;
+    border-top: .45vw solid transparent;
+    border-bottom: .45vw solid transparent;
+  }
+  .time { text-align: right; }
+  #clock { font-size: 2.6vw; font-weight: 300; font-variant-numeric: tabular-nums; letter-spacing: .02em; }
+  #date { font-size: .95vw; opacity: .55; text-transform: capitalize; letter-spacing: .04em; }
+
+  .hero { align-self: end; padding-bottom: 5vh; animation: fadeUp 1s var(--ease) .1s both; }
+  #greet { font-size: 1vw; letter-spacing: .35em; text-transform: uppercase; opacity: .55; }
+  #title {
+    margin: .5vw 0 .7vw;
+    font-size: 6.2vw;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -.035em;
+    text-shadow: 0 0 5vw color-mix(in oklab, var(--accent) 55%, transparent);
+  }
+  #tagline { max-width: 48vw; font-size: 1.4vw; font-weight: 300; opacity: .78; }
+  .hero.swap #title { animation: heroIn .5s var(--ease); }
+  .hero.swap #tagline { animation: heroIn .5s var(--ease) .06s both; }
+
+  .shelf h2 {
+    margin-bottom: 1.5vw;
+    font-size: .9vw; font-weight: 600; letter-spacing: .3em; text-transform: uppercase; opacity: .45;
+    animation: fadeUp .8s var(--ease) .2s both;
+  }
+  #apps { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1.6vw; }
+
+  /* ---------- Tiles ---------- */
+  .app {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border: 0;
+    border-radius: 1vw;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    font-family: var(--ui);
+    font-size: 1.75vw;
+    cursor: none;
+    box-shadow: 0 .8vw 2vw rgba(0, 0, 0, .5);
+    transition: scale .4s var(--ease), box-shadow .4s var(--ease), filter .4s ease;
+    animation: tileIn .8s var(--ease) both;
+    animation-delay: calc(var(--i) * 45ms + 250ms);
+  }
+  .app::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, .16), transparent 45%);
+    pointer-events: none;
+  }
+  .app::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -60%;
+    width: 40%; height: 100%;
+    background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .5), transparent);
+    transform: skewX(-20deg);
+    opacity: 0;
+  }
+  .app span { position: relative; z-index: 1; }
+  .app:focus { outline: none; }
+  #apps.has-sel .app:not(.sel) { filter: brightness(.55) saturate(.75); }
+  .app.sel {
+    z-index: 2;
+    scale: 1.13;
+    box-shadow:
+      0 0 0 .22vw #fff,
+      0 1.6vw 3.6vw rgba(0, 0, 0, .65),
+      0 0 4.5vw color-mix(in oklab, var(--glow) 75%, transparent);
+  }
+  .app.sel::after { animation: shine .9s ease .12s; }
+
+  .bottom {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-top: 4vh;
+    font-size: .9vw;
+    animation: fadeUp .8s var(--ease) .5s both;
+  }
+  .hints { display: flex; gap: 1.6vw; opacity: .5; }
+  .hints kbd {
+    display: inline-block; min-width: 1.6vw; padding: .1vw .45vw; margin-right: .4vw;
+    border: 1px solid rgba(255, 255, 255, .35); border-radius: .35vw;
+    font: inherit; font-size: .8vw; text-align: center;
+  }
+  .remote { display: flex; align-items: center; gap: .9vw; text-align: right; opacity: .7; line-height: 1.5; }
+  .remote b { font-weight: 600; }
+  .remote img { width: 4.6vw; padding: .25vw; border-radius: .5vw; background: #fff; }
+
+  /* ---------- Abrir app: o tile cresce até ocupar a tela ---------- */
+  .launch {
+    position: fixed;
+    z-index: 10;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border-radius: 1vw;
+    font-family: var(--ui);
+    font-size: 1.75vw;
+    transition: all .75s var(--swoop);
+  }
+  .launch.full { left: 0 !important; top: 0 !important; width: 100vw !important; height: 100vh !important; border-radius: 0; }
+  .launch span { transition: transform .75s var(--swoop); }
+  .launch.full span { transform: scale(3); }
+  .launch .bar {
+    position: absolute; left: 50%; bottom: 14vh;
+    width: 12vw; height: .25vw; margin-left: -6vw;
+    overflow: hidden; border-radius: 1vw;
+    background: rgba(255, 255, 255, .15);
+    opacity: 0;
+    transition: opacity .3s ease .6s;
+  }
+  .launch.full .bar { opacity: 1; }
+  .launch .bar::after {
+    content: '';
+    position: absolute; inset: 0; width: 40%;
+    border-radius: inherit;
+    background: currentColor;
+    animation: load 1s ease-in-out infinite;
+  }
+
+  /* ---------- Descanso de tela ---------- */
+  .saver {
+    position: fixed; inset: 0; z-index: 8;
+    display: grid; place-items: center;
+    background: rgba(3, 4, 8, .85);
+    backdrop-filter: blur(24px);
+    opacity: 0; pointer-events: none;
+    transition: opacity 1.4s ease;
+  }
+  body.idle .saver { opacity: 1; }
+  .saver div { text-align: center; animation: float 22s ease-in-out infinite alternate; }
+  #saverClock { font-size: 10vw; font-weight: 200; line-height: 1; font-variant-numeric: tabular-nums; }
+  #saverDate { margin-top: 1vw; font-size: 1.4vw; font-weight: 300; opacity: .6; text-transform: capitalize; }
+
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-2vw); } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(2vw); } }
+  @keyframes heroIn { from { opacity: 0; transform: translateY(1.2vw); filter: blur(8px); } }
+  @keyframes tileIn { from { opacity: 0; translate: 0 3vw; } }
+  @keyframes shine { from { left: -60%; opacity: 1; } to { left: 130%; opacity: 1; } }
+  @keyframes load { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
+  @keyframes float {
+    0% { transform: translate(-14vw, -10vh); }
+    50% { transform: translate(12vw, 6vh); }
+    100% { transform: translate(-6vw, 12vh); }
+  }
+</style>
+</head>
+<body>
+  <div class="bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+  <canvas id="dust"></canvas>
+  <div class="grain"></div>
+
+  <div class="ui">
+    <div class="top">
+      <div class="brand"><i></i>PC-TV</div>
+      <div class="time"><div id="clock"></div><div id="date"></div></div>
+    </div>
+    <div class="hero">
+      <div id="greet"></div>
+      <h1 id="title"></h1>
+      <p id="tagline"></p>
+    </div>
+    <section class="shelf">
+      <h2>Seus apps</h2>
+      <div id="apps"></div>
+    </section>
+    <div class="bottom">
+      <div class="hints"><span><kbd>◀ ▶</kbd>navegar</span><span><kbd>OK</kbd>abrir</span></div>
+      <div class="remote">
+        <p>Controle pelo celular<br><b id="url"></b></p>
+        <img id="qr" alt="">
+      </div>
+    </div>
+  </div>
+
+  <div class="saver"><div><div id="saverClock"></div><div id="saverDate"></div></div></div>
+
+<script>
+  // O launcher tem navegação própria; a injetada (lib/nav.js) deixa as teclas passarem
+  window.__pctvNative = true;
+
+  const $ = (id) => document.getElementById(id);
+  const grid = $('apps');
+  const hero = document.querySelector('.hero');
+  let apps = [];
+  let buttons = [];
+  let current = 0;
+  let launching = false;
+
+  // ---------- Sons discretos (WebAudio, sem arquivos) ----------
+  const sfx = (() => {
+    let ctx;
+    function tone(freq, dur, type, vol, slideTo) {
+      try {
+        ctx ??= new AudioContext();
+        const t = ctx.currentTime;
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = type;
+        o.frequency.setValueAtTime(freq, t);
+        if (slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, t + dur);
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(vol, t + 0.012);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+        o.connect(g).connect(ctx.destination);
+        o.start(t);
+        o.stop(t + dur + 0.02);
+      } catch {}
+    }
+    return {
+      move: () => tone(1046, 0.07, 'sine', 0.02),
+      open: () => { tone(330, 0.6, 'sine', 0.05, 990); tone(660, 0.5, 'triangle', 0.015, 1980); },
+      wake: () => tone(523, 0.18, 'sine', 0.03, 784),
+    };
+  })();
+
+  // ---------- Apps ----------
+  function lastIndex() {
+    try { return Math.max(0, apps.findIndex((a) => a.id === localStorage.getItem('pctv:last'))); } catch { return 0; }
+  }
+
+  function showHero(app) {
+    document.documentElement.style.setProperty('--accent', app.accent);
+    $('title').textContent = app.name;
+    $('tagline').textContent = app.tagline || '';
+    hero.classList.remove('swap');
+    void hero.offsetWidth;
+    hero.classList.add('swap');
+  }
+
+  function select(i) {
+    current = i;
+    buttons.forEach((b, j) => b.classList.toggle('sel', j === i));
+    grid.classList.add('has-sel');
+    buttons[i].focus({ preventScroll: true });
+    showHero(apps[i]);
+  }
+
+  function label(app) {
+    const span = document.createElement('span');
+    span.textContent = app.label || app.name;
+    Object.assign(span.style, app.labelStyle || {});
+    return span;
+  }
+
+  function launch(app, tile) {
+    if (launching) return;
+    launching = true;
+    sfx.open();
+    try { localStorage.setItem('pctv:last', app.id); } catch {}
+
+    const r = tile.getBoundingClientRect();
+    const el = document.createElement('div');
+    el.className = 'launch';
+    Object.assign(el.style, {
+      left: `${r.left}px`, top: `${r.top}px`, width: `${r.width}px`, height: `${r.height}px`,
+      background: app.bg, color: app.color,
+    });
+    el.append(label(app));
+    el.insertAdjacentHTML('beforeend', '<div class="bar"></div>');
+    document.body.append(el);
+    tile.style.visibility = 'hidden';
+    document.querySelector('.ui').classList.add('leaving');
+    requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('full')));
+    setTimeout(() => { location.href = app.url; }, 950);
+  }
+
+  // Voltar do app pelo histórico pode restaurar a página congelada: desfaz a animação
+  addEventListener('pageshow', (e) => {
+    if (!e.persisted) return;
+    launching = false;
+    document.querySelectorAll('.launch').forEach((el) => el.remove());
+    document.querySelector('.ui').classList.remove('leaving');
+    buttons.forEach((b) => { b.style.visibility = ''; });
+  });
+
+  fetch('/api/apps').then((r) => r.json()).then((list) => {
+    apps = list;
+    buttons = apps.map((app, i) => {
+      const b = document.createElement('button');
+      b.className = 'app';
+      b.style.setProperty('--i', i);
+      b.style.setProperty('--glow', app.accent);
+      b.style.background = app.bg;
+      b.style.color = app.color;
+      b.append(label(app));
+      b.addEventListener('click', () => launch(app, b));
+      grid.append(b);
+      return b;
+    });
+    if (buttons.length) select(lastIndex());
+  });
+
+  // ---------- Navegação ----------
+  const columns = () => getComputedStyle(grid).gridTemplateColumns.split(' ').length;
+
+  document.addEventListener('keydown', (e) => {
+    poke();
+    if (document.body.classList.contains('idle')) {
+      document.body.classList.remove('idle');
+      sfx.wake();
+      e.preventDefault();
+      return;
+    }
+    if (launching || !buttons.length) { e.preventDefault(); return; }
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      launch(apps[current], buttons[current]);
+      return;
+    }
+    const step = { ArrowRight: 1, ArrowLeft: -1, ArrowDown: columns(), ArrowUp: -columns() }[e.key];
+    if (!step) return;
+    e.preventDefault();
+    const next = current + step;
+    if (next >= 0 && next < buttons.length) {
+      select(next);
+      sfx.move();
+    }
+  });
+
+  // ---------- Descanso de tela após 3 min parado ----------
+  let idleTimer;
+  function poke() {
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(() => document.body.classList.add('idle'), 3 * 60 * 1000);
+  }
+  document.addEventListener('pointerdown', () => { document.body.classList.remove('idle'); poke(); });
+  poke();
+
+  // ---------- Relógio ----------
+  function tick() {
+    const now = new Date();
+    const time = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    const date = now.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+    const h = now.getHours();
+    $('clock').textContent = $('saverClock').textContent = time;
+    $('date').textContent = $('saverDate').textContent = date;
+    $('greet').textContent = h < 5 ? 'Boa noite' : h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
+  }
+  tick();
+  setInterval(tick, 5000);
+
+  fetch('/api/info').then((r) => r.json()).then(({ remoteUrl, qr }) => {
+    $('qr').src = qr;
+    $('url').textContent = remoteUrl.replace('http://', '');
+  });
+
+  // ---------- Poeira flutuante ----------
+  const cv = $('dust');
+  const cx = cv.getContext('2d');
+  let dots = [];
+  function resize() {
+    const dpr = devicePixelRatio || 1;
+    cv.width = innerWidth * dpr;
+    cv.height = innerHeight * dpr;
+    dots = Array.from({ length: 70 }, () => ({
+      x: Math.random() * cv.width,
+      y: Math.random() * cv.height,
+      r: (Math.random() * 1.5 + 0.4) * dpr,
+      vx: (Math.random() - 0.5) * 0.15 * dpr,
+      vy: -(Math.random() * 0.25 + 0.05) * dpr,
+      a: Math.random() * 0.45 + 0.1,
+      tw: Math.random() * Math.PI * 2,
+    }));
+  }
+  function frame(t) {
+    cx.clearRect(0, 0, cv.width, cv.height);
+    cx.fillStyle = '#fff';
+    for (const d of dots) {
+      d.x += d.vx;
+      d.y += d.vy;
+      if (d.y < -10) { d.y = cv.height + 10; d.x = Math.random() * cv.width; }
+      cx.globalAlpha = d.a * (0.6 + 0.4 * Math.sin(t / 900 + d.tw));
+      cx.beginPath();
+      cx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+      cx.fill();
+    }
+    requestAnimationFrame(frame);
+  }
+  addEventListener('resize', resize);
+  resize();
+  requestAnimationFrame(frame);
+</script>
+</body>
+</html>
