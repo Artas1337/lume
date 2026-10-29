@@ -102,7 +102,8 @@
   #date { font-size: .95vw; opacity: .55; text-transform: capitalize; letter-spacing: .04em; }
 
   .hero { align-self: end; padding-bottom: 5vh; animation: fadeUp 1s var(--ease) .1s both; }
-  #greet { font-size: 1vw; letter-spacing: .35em; text-transform: uppercase; opacity: .55; }
+  #greet { font-size: 1.5vw; font-weight: 300; opacity: .85; }
+  #greet b { font-weight: 600; }
   #title {
     margin: .5vw 0 .7vw;
     font-size: 6.2vw;
@@ -216,6 +217,114 @@
     animation: load 1s ease-in-out infinite;
   }
 
+  /* ---------- Papéis de parede (escolhidos em Ajustes) ---------- */
+  .bg.troca { animation: fundoIn .9s ease; }
+  @keyframes fundoIn { from { opacity: 0; } }
+  body[data-fundo="noite"] .bg { background: radial-gradient(120% 80% at 70% 0%, #14204a 0%, #070a18 55%, #030409 100%); }
+  body[data-fundo="noite"] .b1 { background: #2a3d9a; opacity: .3; }
+  body[data-fundo="noite"] .b2 { background: #1a1050; opacity: .35; }
+  body[data-fundo="noite"] .b3 { opacity: .08; }
+  body[data-fundo="por-do-sol"] .bg { background: linear-gradient(170deg, #1d0b25 0%, #4a1636 40%, #a8433a 78%, #e8924a 100%); }
+  body[data-fundo="por-do-sol"] .b1 { background: #ff6a4d; opacity: .35; }
+  body[data-fundo="por-do-sol"] .b2 { background: #8a2a7a; opacity: .45; }
+  body[data-fundo="por-do-sol"] .b3 { background: #ffb067; opacity: .2; }
+  body[data-fundo="oceano"] .bg { background: linear-gradient(175deg, #01121d 0%, #032d40 45%, #075a66 85%, #0c7f7a 100%); }
+  body[data-fundo="oceano"] .b1 { background: #1bb5c9; opacity: .3; }
+  body[data-fundo="oceano"] .b2 { background: #0a3f8a; opacity: .4; }
+  body[data-fundo="oceano"] .b3 { background: #2de0c0; opacity: .12; }
+  body[data-fundo="grafite"] .bg { background: radial-gradient(110% 90% at 50% 0%, #23252d 0%, #121318 60%, #0a0b0e 100%); }
+  body[data-fundo="imagem"] .bg { background-size: cover; background-position: center; }
+  body[data-fundo="imagem"] .blob, body[data-fundo="grafite"] .blob { display: none; }
+  /* Escurece a foto em cima e embaixo para o texto continuar legível */
+  body[data-fundo="imagem"] .bg::after {
+    background:
+      linear-gradient(90deg, rgba(6, 7, 11, .55) 0%, transparent 60%),
+      linear-gradient(180deg, rgba(6, 7, 11, .6) 0%, rgba(6, 7, 11, .35) 30%, rgba(6, 7, 11, .55) 55%, rgba(6, 7, 11, .94) 100%),
+      radial-gradient(ellipse at center, transparent 45%, rgba(0, 0, 0, .55) 100%);
+  }
+
+  /* ---------- Botão e painel de Ajustes ---------- */
+  .lado { display: flex; align-items: center; gap: 1.6vw; }
+  .gear {
+    width: 3vw; height: 3vw;
+    display: grid; place-items: center;
+    border: 0; border-radius: 50%;
+    background: rgba(255, 255, 255, .08); color: #f2f4fa;
+    cursor: none;
+    transition: background .2s, box-shadow .2s, scale .2s;
+  }
+  .gear svg { width: 1.5vw; height: 1.5vw; }
+  .gear:focus { outline: none; }
+  .gear.sel {
+    scale: 1.12;
+    background: rgba(255, 255, 255, .2);
+    box-shadow: 0 0 0 .2vw #fff, 0 0 2vw color-mix(in oklab, var(--accent) 60%, transparent);
+  }
+  .painel {
+    position: fixed; inset: 0; z-index: 9;
+    display: grid; place-items: center;
+    background: rgba(3, 4, 8, .6);
+    backdrop-filter: blur(18px);
+    animation: fundoIn .3s ease;
+  }
+  .painel[hidden] { display: none; }
+  .caixa {
+    width: 54vw;
+    padding: 3vw;
+    border: 1px solid rgba(255, 255, 255, .08);
+    border-radius: 1.6vw;
+    background: rgba(20, 22, 30, .88);
+    box-shadow: 0 3vw 6vw rgba(0, 0, 0, .5);
+    animation: caixaIn .4s var(--ease);
+  }
+  @keyframes caixaIn { from { opacity: 0; transform: translateY(2vw) scale(.97); } }
+  .caixa h2 { margin-bottom: .6vw; font-size: 2.2vw; font-weight: 700; letter-spacing: -.02em; }
+  .caixa label {
+    display: block; margin: 1.8vw 0 .8vw;
+    font-size: .85vw; font-weight: 600; letter-spacing: .25em; text-transform: uppercase; opacity: .55;
+  }
+  #nome {
+    width: 100%; padding: 1vw 1.2vw;
+    border: .15vw solid rgba(255, 255, 255, .12); border-radius: .8vw;
+    background: rgba(0, 0, 0, .35); color: #fff;
+    font: 400 1.6vw var(--ui);
+  }
+  #nome:focus { outline: none; border-color: #fff; box-shadow: 0 0 2vw color-mix(in oklab, var(--accent) 50%, transparent); }
+  .dica { margin-top: .6vw; font-size: .85vw; opacity: .45; }
+  .fundos { display: flex; flex-wrap: wrap; gap: 1.1vw; }
+  .fundo-op {
+    width: 7.4vw; padding: 0;
+    border: 0; background: none; color: #f2f4fa;
+    font: 500 .85vw var(--ui); text-align: center;
+    cursor: none;
+  }
+  .fundo-op i {
+    display: grid; place-items: center;
+    aspect-ratio: 16 / 10; margin-bottom: .5vw;
+    border: .15vw solid rgba(255, 255, 255, .1); border-radius: .7vw;
+    background-size: cover; background-position: center;
+    font-size: 2vw; font-style: normal; font-weight: 300;
+    transition: scale .2s, box-shadow .2s, border-color .2s;
+  }
+  .fundo-op.ativo i { border-color: color-mix(in oklab, var(--accent) 80%, #fff); }
+  .fundo-op:focus { outline: none; }
+  .fundo-op:focus i { scale: 1.08; border-color: #fff; box-shadow: 0 0 0 .15vw #fff, 0 1vw 2vw rgba(0, 0, 0, .5); }
+  .fundo-op[data-fundo="aurora"] i { background: radial-gradient(circle at 25% 20%, #4f7cff, transparent 60%), radial-gradient(circle at 80% 90%, #5a3cff, transparent 55%), #06070b; }
+  .fundo-op[data-fundo="noite"] i { background: radial-gradient(120% 80% at 70% 0%, #1d2c66, #030409); }
+  .fundo-op[data-fundo="por-do-sol"] i { background: linear-gradient(170deg, #1d0b25, #a8433a 70%, #e8924a); }
+  .fundo-op[data-fundo="oceano"] i { background: linear-gradient(175deg, #01121d, #075a66 80%, #0c7f7a); }
+  .fundo-op[data-fundo="grafite"] i { background: radial-gradient(110% 90% at 50% 0%, #2a2c34, #0a0b0e); }
+  .fundo-op .mais { border-style: dashed; background: rgba(255, 255, 255, .05); }
+  .acoes { display: flex; justify-content: flex-end; margin-top: 2.4vw; }
+  #fechar {
+    padding: .9vw 2.4vw;
+    border: 0; border-radius: 99vw;
+    background: #fff; color: #0a0c14;
+    font: 700 1.1vw var(--ui);
+    cursor: none;
+  }
+  #fechar:focus { outline: none; box-shadow: 0 0 0 .2vw #14161e, 0 0 0 .4vw #fff; }
+
   /* ---------- Descanso de tela ---------- */
   .saver {
     position: fixed; inset: 0; z-index: 8;
@@ -247,7 +356,7 @@
   }
 </style>
 </head>
-<body>
+<body data-fundo="aurora">
   <div class="bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
   <canvas id="dust"></canvas>
   <div class="grain"></div>
@@ -255,7 +364,12 @@
   <div class="ui">
     <div class="top">
       <div class="brand"><i></i><div>PC-TV<small>by Art Code</small></div></div>
-      <div class="time"><div id="clock"></div><div id="date"></div></div>
+      <div class="lado">
+        <button id="ajustes" class="gear" aria-label="Ajustes">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>
+        </button>
+        <div class="time"><div id="clock"></div><div id="date"></div></div>
+      </div>
     </div>
     <div class="hero">
       <div id="greet"></div>
@@ -272,6 +386,19 @@
         <p>Controle pelo celular<br><b id="url"></b></p>
         <img id="qr" alt="">
       </div>
+    </div>
+  </div>
+
+  <div class="painel" id="painel" hidden>
+    <div class="caixa" role="dialog" aria-labelledby="painelTitulo">
+      <h2 id="painelTitulo">Ajustes</h2>
+      <label for="nome">Seu nome</label>
+      <input id="nome" maxlength="30" autocomplete="off" placeholder="Como devemos te chamar?">
+      <p class="dica">Para digitar, use a aba Teclado do controle. Ou ajuste tudo pela aba Ajustes do celular.</p>
+      <label>Papel de parede</label>
+      <div class="fundos" id="fundos"></div>
+      <input type="file" id="arquivo" accept="image/*" hidden>
+      <div class="acoes"><button id="fechar">Pronto</button></div>
     </div>
   </div>
 
@@ -332,6 +459,8 @@
 
   function select(i) {
     current = i;
+    noAjustes = false;
+    gear.classList.remove('sel');
     buttons.forEach((b, j) => b.classList.toggle('sel', j === i));
     grid.classList.add('has-sel');
     buttons[i].focus({ preventScroll: true });
@@ -393,6 +522,207 @@
     if (buttons.length) select(lastIndex());
   });
 
+  // ---------- Ajustes: nome na saudação e papel de parede ----------
+  const FUNDOS = [
+    { id: 'aurora', nome: 'Aurora' },
+    { id: 'noite', nome: 'Noite' },
+    { id: 'por-do-sol', nome: 'Pôr do sol' },
+    { id: 'oceano', nome: 'Oceano' },
+    { id: 'grafite', nome: 'Grafite' },
+  ];
+  const painel = $('painel');
+  const gear = $('ajustes');
+  let cfg = { nome: '', fundo: 'aurora', temImagem: false, versao: 0 };
+  let noAjustes = false;
+  let pos = { l: 0, c: 0 };
+
+  function saudacao() {
+    const h = new Date().getHours();
+    return h < 5 ? 'Boa noite' : h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
+  }
+
+  function saudar() {
+    const forte = document.createElement('b');
+    forte.textContent = cfg.nome ? `${saudacao()}, ${cfg.nome}.` : `${saudacao()}.`;
+    $('greet').replaceChildren(forte, ' O que vamos assistir hoje?');
+  }
+
+  function trocarFundo() {
+    const bg = document.querySelector('.bg');
+    const url = `/papel?v=${cfg.versao}`;
+    const usar = () => {
+      document.body.dataset.fundo = cfg.fundo;
+      bg.style.backgroundImage = cfg.fundo === 'imagem' ? `url(${url})` : '';
+      bg.classList.remove('troca');
+      void bg.offsetWidth;
+      bg.classList.add('troca');
+    };
+    if (cfg.fundo !== 'imagem') return usar();
+    // Só troca depois que a foto carregou, para não piscar a tela
+    const img = new Image();
+    img.onload = usar;
+    img.src = url;
+  }
+
+  function aplicar(novo) {
+    const antes = cfg;
+    cfg = novo;
+    saudar();
+    if (antes.fundo !== cfg.fundo || antes.versao !== cfg.versao) trocarFundo();
+    if (painel.hidden) return;
+    const opcoes = $('fundos').querySelectorAll('[data-fundo]');
+    if (opcoes.length !== FUNDOS.length + (cfg.temImagem ? 1 : 0)) {
+      montarFundos();
+      focarPainel(pos.l, pos.c);
+    } else {
+      opcoes.forEach((b) => b.classList.toggle('ativo', b.dataset.fundo === cfg.fundo));
+    }
+  }
+
+  async function salvar(mudancas) {
+    try {
+      const r = await fetch('/api/config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(mudancas),
+      });
+      if (r.ok) aplicar(await r.json());
+    } catch {}
+  }
+
+  // Fotos grandes do celular ou do PC viram um JPEG de no máximo 2560 px antes de enviar
+  async function reduzir(arquivo) {
+    const bmp = await createImageBitmap(arquivo);
+    const escala = Math.min(1, 2560 / Math.max(bmp.width, bmp.height));
+    const c = document.createElement('canvas');
+    c.width = Math.round(bmp.width * escala);
+    c.height = Math.round(bmp.height * escala);
+    c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+    return new Promise((r) => c.toBlob(r, 'image/jpeg', 0.88));
+  }
+
+  $('arquivo').addEventListener('change', async (e) => {
+    const arquivo = e.target.files[0];
+    e.target.value = '';
+    if (!arquivo) return;
+    try {
+      const r = await fetch('/api/papel-de-parede', {
+        method: 'POST',
+        headers: { 'Content-Type': 'image/jpeg' },
+        body: await reduzir(arquivo),
+      });
+      if (r.ok) aplicar(await r.json());
+    } catch {}
+  });
+
+  function montarFundos() {
+    const caixa = $('fundos');
+    caixa.replaceChildren();
+    const opcoes = cfg.temImagem ? [...FUNDOS, { id: 'imagem', nome: 'Minha imagem' }] : FUNDOS;
+    for (const f of opcoes) {
+      const b = document.createElement('button');
+      b.className = 'fundo-op';
+      b.dataset.fundo = f.id;
+      b.classList.toggle('ativo', cfg.fundo === f.id);
+      const amostra = document.createElement('i');
+      if (f.id === 'imagem') amostra.style.backgroundImage = `url(/papel?v=${cfg.versao})`;
+      b.append(amostra, f.nome);
+      b.addEventListener('click', () => salvar({ fundo: f.id }));
+      caixa.append(b);
+    }
+    const enviar = document.createElement('button');
+    enviar.className = 'fundo-op';
+    enviar.innerHTML = '<i class="mais">+</i>Imagem do PC';
+    enviar.addEventListener('click', () => $('arquivo').click());
+    caixa.append(enviar);
+  }
+
+  // O painel é navegado em 3 linhas: nome, papéis de parede e o botão Pronto
+  const linhasPainel = () => [[$('nome')], [...$('fundos').children], [$('fechar')]];
+
+  function focarPainel(l, c) {
+    const linhas = linhasPainel();
+    l = Math.max(0, Math.min(linhas.length - 1, l));
+    c = Math.max(0, Math.min(linhas[l].length - 1, c));
+    pos = { l, c };
+    linhas[l][c].focus();
+  }
+
+  painel.addEventListener('focusin', (e) => {
+    linhasPainel().forEach((linha, l) => {
+      const c = linha.indexOf(e.target);
+      if (c >= 0) pos = { l, c };
+    });
+  });
+
+  function abrirPainel() {
+    $('nome').value = cfg.nome;
+    montarFundos();
+    painel.hidden = false;
+    focarPainel(0, 0);
+    sfx.open();
+  }
+
+  function fecharPainel() {
+    if ($('nome').value.trim() !== cfg.nome) salvar({ nome: $('nome').value });
+    painel.hidden = true;
+    select(current);
+  }
+
+  function focarAjustes() {
+    noAjustes = true;
+    buttons.forEach((b) => b.classList.remove('sel'));
+    grid.classList.remove('has-sel');
+    gear.classList.add('sel');
+    gear.focus({ preventScroll: true });
+  }
+
+  function teclaAjustes(e) {
+    e.preventDefault();
+    if (e.key === 'Enter') abrirPainel();
+    else if (e.key === 'ArrowDown') { select(current); sfx.move(); }
+  }
+
+  function teclaPainel(e) {
+    const digitando = document.activeElement === $('nome');
+    if (e.key === 'Escape') { e.preventDefault(); fecharPainel(); return; }
+    if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      focarPainel(pos.l + (e.key === 'ArrowDown' ? 1 : -1), pos.c);
+      sfx.move();
+      return;
+    }
+    if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && !digitando) {
+      e.preventDefault();
+      focarPainel(pos.l, pos.c + (e.key === 'ArrowRight' ? 1 : -1));
+      sfx.move();
+      return;
+    }
+    if (e.key === 'Enter' && digitando) {
+      e.preventDefault();
+      salvar({ nome: $('nome').value });
+      focarPainel(1, 0);
+    }
+    // Enter nos botões do painel: deixa o clique normal acontecer
+  }
+
+  gear.addEventListener('click', abrirPainel);
+  $('fechar').addEventListener('click', fecharPainel);
+
+  fetch('/api/config').then((r) => r.json()).then(aplicar).catch(() => {});
+
+  // Mudanças feitas pelo celular chegam aqui na hora
+  (function ouvir() {
+    const ws = new WebSocket(`ws://${location.host}/ws`);
+    ws.onmessage = (ev) => {
+      try {
+        const m = JSON.parse(ev.data);
+        if (m.t === 'config') aplicar(m.config);
+      } catch {}
+    };
+    ws.onclose = () => setTimeout(ouvir, 2000);
+  })();
+
   // ---------- Navegação ----------
   const columns = () => getComputedStyle(grid).gridTemplateColumns.split(' ').length;
 
@@ -405,6 +735,8 @@
       return;
     }
     if (launching || !buttons.length) { e.preventDefault(); return; }
+    if (!painel.hidden) return teclaPainel(e);
+    if (noAjustes) return teclaAjustes(e);
     if (e.key === 'Enter') {
       e.preventDefault();
       launch(apps[current], buttons[current]);
@@ -414,6 +746,12 @@
     if (!step) return;
     e.preventDefault();
     const next = current + step;
+    // Subir da primeira fileira leva ao botão de Ajustes
+    if (e.key === 'ArrowUp' && next < 0) {
+      focarAjustes();
+      sfx.move();
+      return;
+    }
     if (next >= 0 && next < buttons.length) {
       select(next);
       sfx.move();
@@ -434,10 +772,9 @@
     const now = new Date();
     const time = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
     const date = now.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
-    const h = now.getHours();
     $('clock').textContent = $('saverClock').textContent = time;
     $('date').textContent = $('saverDate').textContent = date;
-    $('greet').textContent = h < 5 ? 'Boa noite' : h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
+    saudar();
   }
   tick();
   setInterval(tick, 5000);

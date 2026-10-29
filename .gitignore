@@ -5,3 +5,5 @@ node_modules/
 icone.ico
 *.log
 dist/
+# Preferencias do usuario (nome e papel de parede)
+dados/

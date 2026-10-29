@@ -27,8 +27,8 @@
   #status { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
   #status::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #e5484d; }
   #status.on::before { background: #3dd68c; }
-  nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; background: var(--btn); border-radius: 12px; margin-bottom: 20px; }
-  nav button { background: none; color: var(--muted); padding: 10px 0; border-radius: 9px; font-size: 14px; font-weight: 600; }
+  nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; padding: 4px; background: var(--btn); border-radius: 12px; margin-bottom: 20px; }
+  nav button { background: none; color: var(--muted); padding: 10px 0; border-radius: 9px; font-size: 13px; font-weight: 600; }
   nav button.on { background: var(--btn-on); color: var(--text); }
   button { border: 0; font: inherit; color: var(--text); background: var(--btn); touch-action: manipulation; }
   button:active { background: var(--btn-on); }
@@ -95,6 +95,23 @@
   }
   input:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
   form button { padding: 0 20px; border-radius: 14px; background: var(--accent); color: #fff; font-weight: 600; }
+  .titulo { font-size: 12px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+  .fundos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .fundos button { overflow: hidden; padding: 0 0 9px; border-radius: 14px; font-size: 13px; }
+  .fundos button i { display: block; height: 58px; margin-bottom: 8px; background-size: cover; background-position: center; }
+  .fundos button.ativo { box-shadow: 0 0 0 2px var(--accent); }
+  .fundos [data-fundo="aurora"] i { background: radial-gradient(circle at 25% 20%, #4f7cff, transparent 60%), radial-gradient(circle at 80% 90%, #5a3cff, transparent 55%), #06070b; }
+  .fundos [data-fundo="noite"] i { background: radial-gradient(120% 80% at 70% 0%, #1d2c66, #030409); }
+  .fundos [data-fundo="por-do-sol"] i { background: linear-gradient(170deg, #1d0b25, #a8433a 70%, #e8924a); }
+  .fundos [data-fundo="oceano"] i { background: linear-gradient(175deg, #01121d, #075a66 80%, #0c7f7a); }
+  .fundos [data-fundo="grafite"] i { background: radial-gradient(110% 90% at 50% 0%, #2a2c34, #0a0b0e); }
+  .foto {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    height: 58px; border-radius: 14px;
+    background: var(--btn); font-weight: 600;
+  }
+  .foto:active { background: var(--btn-on); }
+  #cfgStatus { min-height: 1.4em; font-size: 13px; color: var(--muted); text-align: center; }
   footer {
     margin-top: auto;
     padding-top: 18px;
@@ -115,6 +132,7 @@
     <button data-tab="pad" class="on">Controle</button>
     <button data-tab="touch">Touchpad</button>
     <button data-tab="kbd">Teclado</button>
+    <button data-tab="cfg">Ajustes</button>
   </nav>
 
   <section id="pad" class="tab on">
@@ -157,6 +175,18 @@
     </div>
   </section>
 
+  <section id="cfg" class="tab">
+    <label class="titulo" for="cfgNome">Seu nome na TV</label>
+    <form id="formNome">
+      <input id="cfgNome" maxlength="30" autocomplete="off" placeholder="Ex.: Arthur">
+      <button>Salvar</button>
+    </form>
+    <span class="titulo">Papel de parede</span>
+    <div class="fundos" id="cfgFundos"></div>
+    <label class="foto"><input type="file" id="cfgFoto" accept="image/*" hidden>📷 Usar foto do celular</label>
+    <p id="cfgStatus" role="status"></p>
+  </section>
+
   <footer>PC-TV by <b>Art Code</b></footer>
 
 <script>
@@ -166,6 +196,12 @@
   function connect() {
     ws = new WebSocket(`ws://${location.host}/ws`);
     ws.onopen = () => { status.textContent = 'conectado'; status.classList.add('on'); };
+    ws.onmessage = (ev) => {
+      try {
+        const m = JSON.parse(ev.data);
+        if (m.t === 'config') mostrarCfg(m.config);
+      } catch {}
+    };
     ws.onclose = () => {
       status.textContent = 'desconectado';
       status.classList.remove('on');
@@ -250,6 +286,80 @@
       navigator.vibrate?.(8);
     }
   }, { passive: false });
+
+  // Ajustes: nome na saudação da TV e papel de parede
+  const FUNDOS = [['aurora', 'Aurora'], ['noite', 'Noite'], ['por-do-sol', 'Pôr do sol'], ['oceano', 'Oceano'], ['grafite', 'Grafite']];
+  const cfgNome = document.getElementById('cfgNome');
+  const cfgStatus = document.getElementById('cfgStatus');
+
+  function mostrarCfg(c) {
+    if (document.activeElement !== cfgNome) cfgNome.value = c.nome || '';
+    const opcoes = c.temImagem ? [...FUNDOS, ['imagem', 'Minha foto']] : FUNDOS;
+    const caixa = document.getElementById('cfgFundos');
+    caixa.replaceChildren(...opcoes.map(([id, nome]) => {
+      const b = document.createElement('button');
+      b.dataset.fundo = id;
+      b.classList.toggle('ativo', c.fundo === id);
+      const amostra = document.createElement('i');
+      if (id === 'imagem') amostra.style.backgroundImage = `url(/papel?v=${c.versao})`;
+      b.append(amostra, nome);
+      b.addEventListener('click', () => enviarCfg({ fundo: id }));
+      return b;
+    }));
+  }
+
+  async function enviarCfg(mudancas) {
+    try {
+      const r = await fetch('/api/config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(mudancas),
+      });
+      if (!r.ok) throw new Error();
+      mostrarCfg(await r.json());
+      cfgStatus.textContent = 'Pronto, já está na TV.';
+    } catch {
+      cfgStatus.textContent = 'Não deu certo. Confira se o PC-TV está aberto e tente de novo.';
+    }
+  }
+
+  // Foto do celular vira um JPEG de no máximo 2560 px antes de enviar
+  async function reduzir(arquivo) {
+    const bmp = await createImageBitmap(arquivo);
+    const escala = Math.min(1, 2560 / Math.max(bmp.width, bmp.height));
+    const c = document.createElement('canvas');
+    c.width = Math.round(bmp.width * escala);
+    c.height = Math.round(bmp.height * escala);
+    c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+    return new Promise((r) => c.toBlob(r, 'image/jpeg', 0.88));
+  }
+
+  document.getElementById('formNome').addEventListener('submit', (e) => {
+    e.preventDefault();
+    cfgNome.blur();
+    enviarCfg({ nome: cfgNome.value });
+  });
+
+  document.getElementById('cfgFoto').addEventListener('change', async (e) => {
+    const arquivo = e.target.files[0];
+    e.target.value = '';
+    if (!arquivo) return;
+    cfgStatus.textContent = 'Enviando a foto…';
+    try {
+      const r = await fetch('/api/papel-de-parede', {
+        method: 'POST',
+        headers: { 'Content-Type': 'image/jpeg' },
+        body: await reduzir(arquivo),
+      });
+      if (!r.ok) throw new Error();
+      mostrarCfg(await r.json());
+      cfgStatus.textContent = 'Foto aplicada na TV.';
+    } catch {
+      cfgStatus.textContent = 'Não consegui enviar a foto. Tente outra imagem.';
+    }
+  });
+
+  fetch('/api/config').then((r) => r.json()).then(mostrarCfg).catch(() => {});
 
   // Teclado
   const txt = document.getElementById('txt');

@@ -17,6 +17,7 @@ Dois cliques no arquivo baixado e pronto. Se o Windows mostrar "O Windows proteg
 - **Navegação por setas em qualquer site**: uma moldura marca o item selecionado e as setas pulam para o vizinho mais próximo naquela direção
 - No player de vídeo as setas voltam ao normal (avançar, volume) e OK vira play/pause
 - **Launcher animado**: aurora na cor do app focado, efeito de abertura em que o card cresce até ocupar a tela, sons discretos e descanso de tela com relógio
+- **Personalização**: saudação com o seu nome ("Boa tarde, Arthur. O que vamos assistir hoje?") e papel de parede (5 temas ou uma foto do PC ou do celular), ajustados na própria TV ou na aba Ajustes do controle
 - Volume do Windows pelo celular, sem atraso
 - Atalho na área de trabalho e opção de iniciar junto com o Windows
 
@@ -87,6 +88,7 @@ lib/nav.js           navegação espacial injetada nas páginas
 lib/system.js        volume do Windows
 public/launcher.html tela da TV
 public/remote.html   controle do celular
+lib/config.js        nome e papel de parede (salvos em dados/)
 apps.json            lista de streamings
 ```
 
