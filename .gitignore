@@ -3,7 +3,6 @@ node_modules/
 .perfil-edge/
 # Gerado por criar-atalho.ps1
 lume.ico
-icone.ico
 *.log
 dist/
 # Preferencias do usuario (nome e papel de parede)
