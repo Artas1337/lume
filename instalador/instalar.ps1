@@ -29,7 +29,19 @@ try {
 
   Passo 'Copiando os arquivos'
   New-Item -ItemType Directory -Force $Destino | Out-Null
-  Expand-Archive -Path "$Pacote\app.zip" -DestinationPath $Destino -Force
+  $codigo = Split-Path $Pacote -Parent
+  if (Test-Path "$Pacote\app.zip") {
+    # Rodando de dentro do PC-TV-Instalador.exe: o app já vem pronto, com dependências
+    Expand-Archive -Path "$Pacote\app.zip" -DestinationPath $Destino -Force
+  } elseif (Test-Path "$codigo\server.js") {
+    # Rodando da pasta baixada do GitHub: copia o código; as dependências vêm depois do Node
+    $itens = 'server.js', 'apps.json', 'package.json', 'package-lock.json', 'LICENSE', 'README.md',
+      'iniciar-oculto.vbs', 'criar-atalho.ps1', 'instalar-inicializacao.ps1', 'lib', 'public'
+    foreach ($i in $itens) { Copy-Item "$codigo\$i" $Destino -Recurse -Force }
+    Copy-Item "$Pacote\desinstalar.ps1" $Destino -Force
+  } else {
+    throw 'Arquivos do PC-TV nao encontrados. Use o PC-TV-Instalador.exe ou rode este script de dentro da pasta "instalador" do projeto.'
+  }
   Ok $Destino
 
   $node = "$Destino\node\node.exe"
@@ -60,6 +72,16 @@ try {
     Move-Item "$env:TEMP\$nome" "$Destino\node"
     Remove-Item $zip
     Ok "Node.js $($lts.version) (verificado)"
+  }
+
+  if (-not (Test-Path "$Destino\node_modules")) {
+    Passo 'Instalando as dependencias'
+    Push-Location $Destino
+    try {
+      & "$Destino\node\npm.cmd" ci --omit=dev --no-fund --no-audit --loglevel=error
+      if ($LASTEXITCODE) { throw 'Nao consegui instalar as dependencias. Confira a internet e rode de novo.' }
+    } finally { Pop-Location }
+    Ok 'ws e qrcode'
   }
 
   if (-not $Teste) {

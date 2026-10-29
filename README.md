@@ -4,6 +4,10 @@ Launcher de streaming em tela cheia, controlado pelo **celular como controle rem
 
 ![CI](https://github.com/Artas1337/pc-tv/actions/workflows/ci.yml/badge.svg)
 
+### ⬇️ [Baixar o instalador para Windows](https://github.com/Artas1337/pc-tv/releases/latest/download/PC-TV-Instalador.exe)
+
+Dois cliques no arquivo baixado e pronto. Se o Windows mostrar "O Windows protegeu o computador", clique em **Mais informações** → **Executar assim mesmo** (o programa não tem assinatura digital paga).
+
 > Projeto de portfólio. Node.js puro no servidor, controle do navegador pelo Chrome DevTools Protocol e uma navegação "estilo TV" injetada em sites que não foram feitos para controle remoto.
 
 ## Funcionalidades
@@ -64,7 +68,9 @@ Para adicionar ou remover serviços, edite `apps.json`.
 
 ## Instalador
 
-Para quem só quer usar, sem rodar o código:
+Para quem só quer usar: baixe o `.exe` em [Releases](https://github.com/Artas1337/pc-tv/releases/latest). Quem baixou o código pode dar dois cliques em `Instalar PC-TV.cmd`.
+
+Para gerar o `.exe` de novo:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File instalador\gerar-instalador.ps1
