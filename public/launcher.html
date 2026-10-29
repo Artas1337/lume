@@ -88,6 +88,15 @@
     border-top: .45vw solid transparent;
     border-bottom: .45vw solid transparent;
   }
+  .brand small {
+    display: block;
+    margin-top: .15vw;
+    font-size: .75vw;
+    font-weight: 400;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    opacity: .5;
+  }
   .time { text-align: right; }
   #clock { font-size: 2.6vw; font-weight: 300; font-variant-numeric: tabular-nums; letter-spacing: .02em; }
   #date { font-size: .95vw; opacity: .55; text-transform: capitalize; letter-spacing: .04em; }
@@ -220,6 +229,10 @@
   .saver div { text-align: center; animation: float 22s ease-in-out infinite alternate; }
   #saverClock { font-size: 10vw; font-weight: 200; line-height: 1; font-variant-numeric: tabular-nums; }
   #saverDate { margin-top: 1vw; font-size: 1.4vw; font-weight: 300; opacity: .6; text-transform: capitalize; }
+  .saver small {
+    position: absolute; bottom: 5vh; left: 0; right: 0;
+    font-size: .85vw; letter-spacing: .4em; text-align: center; text-transform: uppercase; opacity: .3;
+  }
 
   @keyframes fadeDown { from { opacity: 0; transform: translateY(-2vw); } }
   @keyframes fadeUp { from { opacity: 0; transform: translateY(2vw); } }
@@ -241,7 +254,7 @@
 
   <div class="ui">
     <div class="top">
-      <div class="brand"><i></i>PC-TV</div>
+      <div class="brand"><i></i><div>PC-TV<small>by Art Code</small></div></div>
       <div class="time"><div id="clock"></div><div id="date"></div></div>
     </div>
     <div class="hero">
@@ -262,7 +275,7 @@
     </div>
   </div>
 
-  <div class="saver"><div><div id="saverClock"></div><div id="saverDate"></div></div></div>
+  <div class="saver"><div><div id="saverClock"></div><div id="saverDate"></div></div><small>PC-TV by Art Code</small></div>
 
 <script>
   // O launcher tem navegação própria; a injetada (lib/nav.js) deixa as teclas passarem

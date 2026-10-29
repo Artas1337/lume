@@ -95,6 +95,18 @@
   }
   input:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
   form button { padding: 0 20px; border-radius: 14px; background: var(--accent); color: #fff; font-weight: 600; }
+  footer {
+    margin-top: auto;
+    padding-top: 18px;
+    padding-bottom: env(safe-area-inset-bottom);
+    font-size: 11px;
+    letter-spacing: .3em;
+    text-align: center;
+    text-transform: uppercase;
+    color: var(--muted);
+    opacity: .6;
+  }
+  footer b { color: var(--text); font-weight: 600; }
 </style>
 </head>
 <body>
@@ -144,6 +156,8 @@
       <button data-key="ok">↵ Enter</button>
     </div>
   </section>
+
+  <footer>PC-TV by <b>Art Code</b></footer>
 
 <script>
   let ws;
