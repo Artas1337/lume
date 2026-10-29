@@ -31,7 +31,8 @@ Dois cliques no arquivo baixado e pronto. Se o Windows mostrar "O Windows proteg
 | Teclas e cliques precisam chegar mesmo sem foco na janela | Eventos enviados pelo **DevTools Protocol** (`Input.dispatchKeyEvent`/`dispatchMouseEvent`), que o navegador trata como entrada real, mais `Emulation.setFocusEmulationEnabled`. |
 | Carrosséis escondem itens fora da tela e quebram se rolados à força | Só entram na navegação itens inteiros na horizontal; para avançar o carrossel, a moldura passa pela seta do próprio site. |
 | Modais (detalhes do filme) | A navegação fica presa dentro do `[role=dialog]` aberto; Voltar manda Esc para fechar. |
-| Volume com atraso de ~0,5 s por clique | Um único PowerShell fica aberto lendo códigos de tecla do stdin e chama `keybd_event`, em vez de abrir um processo por clique. |
+| Volume com atraso de ~0,5 s por clique | Um processo auxiliar (`Lume.exe --volume`) fica aberto lendo códigos de tecla do stdin e chama `keybd_event`, em vez de abrir um processo por clique. |
+| Instalador marcado pelo Windows Defender | Trocado o pacote de scripts por Inno Setup com tudo embutido e um `Lume.exe` em C#, sem PowerShell codificado nem downloads na instalação. |
 | Login dos streamings não pode se perder | Edge com perfil próprio (`--user-data-dir`) em vez de modo quiosque, que apaga os dados ao fechar. |
 | Atalho clicado com o Lume já rodando | A segunda instância detecta `EADDRINUSE`, só reabre a tela da TV e sai. |
 | Extensões do navegador abrindo abas próprias | Edge iniciado com `--disable-extensions` e o CDP ignora alvos `chrome-extension://`. |
@@ -43,7 +44,7 @@ Dois cliques no arquivo baixado e pronto. Se o Windows mostrar "O Windows proteg
 | Servidor | Node.js (sem framework), `ws`, `qrcode` |
 | Navegador | Microsoft Edge controlado via Chrome DevTools Protocol |
 | Telas | HTML, CSS e JavaScript puros (`@property`, `color-mix`, Canvas, Web Audio) |
-| Windows | PowerShell (`keybd_event`), VBScript para iniciar sem janela |
+| Windows | `Lume.exe` em C# (`keybd_event`, abrir sem janela), instalador Inno Setup |
 | Testes | `node:test` e CI no GitHub Actions |
 
 ## Como rodar
@@ -71,15 +72,17 @@ Para adicionar ou remover serviços, edite `apps.json`.
 
 ## Instalador
 
-Para quem só quer usar: baixe o `.exe` em [Releases](https://github.com/Artas1337/lume/releases/latest). Quem baixou o código pode dar dois cliques em `Instalar Lume.cmd`.
+Para quem só quer usar: baixe o `.exe` em [Releases](https://github.com/Artas1337/lume/releases/latest).
 
-Para gerar o `.exe` de novo:
+Para gerar o `.exe` de novo (precisa do [Inno Setup](https://jrsoftware.org/isinfo.php): `winget install JRSoftware.InnoSetup`):
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File instalador\gerar-instalador.ps1
+npm run instalador
 ```
 
-Gera `dist\Lume-Instalador.exe` com o IExpress do Windows. O instalador copia o app para `%LOCALAPPDATA%\Programs\Lume`, baixa o Node.js oficial (conferido pelo SHA-256 de nodejs.org), cria os atalhos e registra a desinstalação em Configurações → Aplicativos. Não pede administrador.
+Gera `dist\Lume-Instalador.exe` com o Inno Setup. O instalador já leva tudo dentro: o app, o Node.js oficial (conferido pelo SHA-256 de nodejs.org na hora de gerar) e o `Lume.exe`, um executável pequeno em C# que abre o app sem janela e controla o volume. Instala em `%LOCALAPPDATA%\Programs\Lume`, sem pedir administrador, e desinstala por Configurações → Aplicativos.
+
+Nada é baixado nem executado por script durante a instalação. A primeira versão do instalador fazia isso e o Windows Defender a marcava como suspeita (falso positivo `Wacapew.A!ml`).
 
 ## Estrutura
 

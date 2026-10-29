@@ -110,6 +110,14 @@ const server = http.createServer(async (req, res) => {
       avisarConfig();
       return sendJson(res, publico(config.get()));
     }
+    if (pathname === '/api/sair' && req.method === 'POST') {
+      // Só aceita pedidos do próprio PC: o instalador fecha o Lume antes de atualizar ou desinstalar
+      if (!['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(req.socket.remoteAddress)) return res.writeHead(403).end();
+      sendJson(res, { ok: true });
+      await tv.fechar();
+      setTimeout(() => process.exit(0), 200);
+      return;
+    }
     if (pathname === '/papel') {
       const { imagem } = config.get();
       if (!imagem) throw new Error('sem papel de parede');

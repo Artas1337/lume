@@ -8,3 +8,5 @@ icone.ico
 dist/
 # Preferencias do usuario (nome e papel de parede)
 dados/
+# Gerado por npm run compilar
+Lume.exe

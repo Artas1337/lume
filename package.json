@@ -1,12 +1,14 @@
 {
   "name": "lume",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": true,
   "type": "module",
   "description": "Transforma o PC em TV: launcher de streaming + controle remoto pelo celular",
   "scripts": {
     "start": "node server.js",
-    "test": "node --test"
+    "test": "node --test",
+    "compilar": "powershell -NoProfile -File instalador/compilar-lume.ps1",
+    "instalador": "powershell -NoProfile -File instalador/gerar-instalador.ps1"
   },
   "engines": {
     "node": ">=22"
