@@ -4,3 +4,4 @@ node_modules/
 # Gerado por criar-atalho.ps1
 icone.ico
 *.log
+dist/

@@ -62,6 +62,16 @@ powershell -ExecutionPolicy Bypass -File instalar-inicializacao.ps1
 
 Para adicionar ou remover serviços, edite `apps.json`.
 
+## Instalador
+
+Para quem só quer usar, sem rodar o código:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File instalador\gerar-instalador.ps1
+```
+
+Gera `dist\PC-TV-Instalador.exe` com o IExpress do Windows. O instalador copia o app para `%LOCALAPPDATA%\Programs\PC-TV`, baixa o Node.js oficial (conferido pelo SHA-256 de nodejs.org), cria os atalhos e registra a desinstalação em Configurações → Aplicativos. Não pede administrador.
+
 ## Estrutura
 
 ```
