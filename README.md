@@ -99,6 +99,10 @@ apps.json            lista de streamings
 
 > Qualquer aparelho na mesma rede consegue abrir o controle. Use em rede doméstica.
 
+## Versões
+
+O que mudou em cada versão está no [CHANGELOG](CHANGELOG.md).
+
 ## Licença
 
 MIT © Arthur Martins
