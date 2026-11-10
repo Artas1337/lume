@@ -49,7 +49,7 @@ Dois cliques no arquivo baixado e pronto. Se o Windows mostrar "O Windows proteg
 
 ## Como rodar
 
-Requisitos: Windows, [Node.js](https://nodejs.org) 22+ e Microsoft Edge.
+Requisitos: Windows ou Linux, [Node.js](https://nodejs.org) 22+ e um navegador Chromium (Edge no Windows; Chrome, Edge, Brave ou Chromium no Linux).
 
 ```bash
 npm install
@@ -69,6 +69,20 @@ powershell -ExecutionPolicy Bypass -File instalar-inicializacao.ps1
 ```
 
 Para adicionar ou remover serviços, edite `apps.json`.
+
+## Linux
+
+```bash
+git clone https://github.com/Artas1337/lume.git
+sh lume/instalador/linux/instalar.sh
+```
+
+- Instala em `~/.local/share/lume`, sem `sudo`, e coloca o **Lume no menu de aplicativos**. Com `--iniciar-com-o-sistema`, ele também abre junto com o sistema.
+- Usa o **Chrome** ou o **Edge** se estiverem instalados. O Chromium funciona, mas costuma vir sem Widevine, e aí Netflix, Disney+ e Prime não tocam.
+- O volume é controlado pelo `pactl` (PulseAudio/PipeWire), pelo `wpctl` ou pelo `amixer`, o que existir.
+- Se o celular não conectar, libere a porta no firewall: `sudo ufw allow 7777/tcp`.
+- Para desinstalar: `sh ~/.local/share/lume/desinstalar.sh`.
+- Para forçar um navegador: `LUME_NAVEGADOR=/caminho/do/navegador`.
 
 ## Instalador
 

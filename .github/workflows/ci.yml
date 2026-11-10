@@ -7,7 +7,11 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -15,4 +19,8 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      # No Ubuntu, um dos testes abre o Lume de verdade com o Chrome do runner
       - run: npm test
+      - name: Scripts de instalação do Linux
+        if: runner.os == 'Linux'
+        run: shellcheck instalador/linux/*.sh

@@ -2,6 +2,12 @@
 
 Todas as versões ficam em [Releases](https://github.com/Artas1337/lume/releases).
 
+## Próxima versão
+
+### Adicionado
+- **Lume no Linux**: funciona com Chrome, Edge, Brave ou Chromium; volume pelo `pactl`, `wpctl` ou `amixer`; instalador `instalador/linux/instalar.sh` com atalho no menu de aplicativos.
+- CI roda os testes no Ubuntu e no Windows, e no Ubuntu abre o Lume de verdade com o Chrome.
+
 ## v0.3.1 (29/10/2026)
 
 ### Corrigido
